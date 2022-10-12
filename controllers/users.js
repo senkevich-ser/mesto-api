@@ -21,4 +21,12 @@ const createUser = (req, res) => {
     // данные не записались, вернём ошибку
     .catch((err) => res.status(500).send({ message: "Произошла ошибка", error: `${err}` }));
 };
-module.exports = { getUsers, createUser, getUser };
+const updateAvatar = (req, res) => {
+  console.log(req.user._id)
+  const{avatar}=req.body
+  User.findByIdAndUpdate(req.user._id, { avatar: avatar })
+  .then(user => res.send({ data: user }))
+  .catch((err) => res.status(500).send({ message: "Произошла ошибка", error: `${err}` }));
+};
+
+module.exports = { getUsers, createUser, getUser,updateAvatar };
