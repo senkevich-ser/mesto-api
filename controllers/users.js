@@ -8,7 +8,13 @@ const getUsers = (req, res) => {
 
 const getUser = (req, res) => {
   User.findById(req.params.id)
-    .then((user) => res.send({ data: user }))
+    .then((user) => {
+      if (user) {
+        res.send({ data: user });
+      } else {
+        res.status(404).send({ message: "Пользователь по указанному _id не найден" });
+      }
+    })
     .catch((err) => res.status(500).send({ message: "Произошла ошибка", error: `${err}` }));
 };
 
@@ -16,8 +22,14 @@ const createUser = (req, res) => {
   const { name, about, avatar } = req.body;
 
   User.create({ name, about, avatar })
-    // вернём записанные в базу данные
-    .then((user) => res.send({ data: user }))
+    // вернём записанные в базу данныеclear
+    .then((user) => {
+      if (user) {
+        res.send({ data: user });
+      } else {
+        res.status(400).send({ message: "Переданы не корректные данные при создании пользователя" });
+      }
+    })
     // данные не записались, вернём ошибку
     .catch((err) => res.status(500).send({ message: "Произошла ошибка", error: `${err}` }));
 };
